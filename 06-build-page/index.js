@@ -31,20 +31,31 @@ async function copyAssets() {
     (err, files) => {
       files.forEach((file) => {
         if (!file.isDirectory()) {
-          fs.copyFile(
-            `${functionPath(...Array.from(arguments), file.name)}`,
-            `${functionPath(
-              "project-dist",
-              ...Array.from(arguments),
-              file.name
-            )}`,
-            () => {}
-          );
+          fsPromise
+            .appendFile(
+              `${functionPath(...Array.from(arguments), file.name)}`,
+              ""
+            )
+            .then(() => {
+              fs.copyFile(
+                `${functionPath(...Array.from(arguments), file.name)}`,
+                `${functionPath(
+                  "project-dist",
+                  ...Array.from(arguments),
+                  file.name
+                )}`,
+                () => {}
+              );
+            });
         } else if (file.isDirectory()) {
-          createDir(
-            functionPath("project-dist", ...Array.from(arguments), file.name)
-          );
-          copyAssets(...Array.from(arguments), file.name);
+          fsPromise
+            .mkdir(
+              functionPath("project-dist", ...Array.from(arguments), file.name),
+              { recursive: true }
+            )
+            .then(() => {
+              copyAssets(...Array.from(arguments), file.name);
+            });
         }
       });
     }
@@ -165,10 +176,3 @@ async function createPage() {
 }
 
 createPage();
-
-
-
-
-
-
-
