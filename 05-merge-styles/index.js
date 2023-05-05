@@ -13,6 +13,7 @@ const functionPath = (folder, name = false) => {
 async function createNewCss(name) {
   fs.unlink(functionPath("project-dist", name), () => {});
   fs.appendFile(functionPath("project-dist", name), "", () => {});
+  console.log(name)
 }
 
 // 4. Проверка является ли объект файлом и имеет ли файл нужное расширение
@@ -21,6 +22,8 @@ async function mergeCss(dest) {
     functionPath(dest),
     { withFileTypes: true },
     async (err, files) => {
+      // for (const file of files) { //
+      //files.forEach (file) =>
       for (const file of files) {
         await checkExtension(file, dest);
       }
@@ -39,7 +42,13 @@ async function checkExtension(file, dest) {
   }
 }
 
+async function createFolder(name) {
+    fs.mkdir(functionPath(name), { recursive: true }, () => {});
+ 
+}
+
 async function runTask() {
+  await createFolder(`project-dist`);
   await createNewCss(`bundle.css`);
   await mergeCss("styles");
 }
