@@ -46,6 +46,12 @@ userInteractionAll = () => {
   });
 };
 
+fs.appendFile(pathToFile("02-write-file-file.txt"), '', function (err) {
+  if (err) {
+    throw err;
+  }
+});
+
 userInteractionFirst();
 
 readlineInterface.on("SIGINT", function () {
