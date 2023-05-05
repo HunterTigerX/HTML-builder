@@ -11,7 +11,7 @@ const functionPath = (folder, name = false) => {
 
 // 3. Чтение содержимого папки **styles**
 async function createNewCss(name) {
-  fs.unlinkSync(functionPath("project-dist", name));
+  fs.unlink(functionPath("project-dist", name), () => {});
   fs.appendFile(functionPath("project-dist", name), "", () => {});
 }
 
@@ -21,8 +21,6 @@ async function mergeCss(dest) {
     functionPath(dest),
     { withFileTypes: true },
     async (err, files) => {
-      // for (const file of files) { //
-      //files.forEach (file) =>
       for (const file of files) {
         await checkExtension(file, dest);
       }
