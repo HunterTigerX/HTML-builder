@@ -22,6 +22,12 @@ async function createDir(dir) {
   fs.mkdir(dir, { recursive: true }, () => {});
 }
 
+async function clearDir(dir) {
+  try {
+    await fsPromise.rmdir(dir, { recursive: true }, () => {});
+  } catch (err) {}
+}
+
 // 7. Использовать скрипт из задания **04-copy-directory** для переноса папки **assets** в папку project-dist
 // 4. Копирует папку **assets** в **project-dist/assets**
 async function copyAssets() {
@@ -168,6 +174,7 @@ async function readTemplate(template) {
 }
 
 async function createPage() {
+  await clearDir(functionPath("project-dist"));
   await createDir(functionPath("project-dist"));
   await copyAssets("assets");
   await mergeStyles("styles");
