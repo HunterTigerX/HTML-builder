@@ -10,6 +10,18 @@ const pathToFiles = (dir, file = false) => {
   }
 };
 
+function clearDir() {
+  fs.mkdir(pathToFiles("files-copy"), { recursive: true }, (err) => {
+    fs.readdir(pathToFiles("files-copy"), (err, files) => {
+      files.forEach((file) => {
+        fs.unlink(pathToFiles("files-copy", file), (err) => {
+          if (err) throw err;
+        });
+      });
+    });
+  });
+}
+
 function createDir() {
   fs.mkdir(pathToFiles("files-copy"), { recursive: true }, (err) => {
     fs.readdir(pathToFiles("files"), (err, files) => {
@@ -38,5 +50,5 @@ async function fillCopiedFile(name) {
     () => {}
   );
 }
-
+clearDir();
 createDir();
